@@ -10,7 +10,11 @@ go run github.com/playwright-community/playwright-go/cmd/playwright install --wi
 go build .  
 ./Go-playwright 
 
-Check the "out" folder for images  
 
-Add your urls to the urls.txt file.  
-Add new sizes following the existing format in the sizes.json
+If you are realling feeling adventurous you use the following command to flip the image naming convention so sizes come first, domains second.  
+./Go-playwright -flip true
+
+
+See the "out" folder for your screenshots.  
+Modify the urls.txt file to add your urls.  
+Modify the sizes.json to add custom sizes.
