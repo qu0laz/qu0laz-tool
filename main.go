@@ -17,7 +17,6 @@ import (
 	"github.com/playwright-community/playwright-go"
 )
 
-// Log a message, err and kill it
 // Size and job struct
 type Size struct {
 	Width  int `json:"width"`
