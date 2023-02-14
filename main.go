@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -17,6 +18,7 @@ import (
 	"github.com/playwright-community/playwright-go"
 )
 
+// Log a message, err and kill it
 // Size and job struct
 type Size struct {
 	Width  int `json:"width"`
@@ -29,7 +31,20 @@ type Job struct {
 	Success bool
 }
 
+var flip bool
+
+func init() {
+	//
+	flipImageNaming := flag.Bool("flip", false, "flips image naming")
+	flag.Parse()
+	if *flipImageNaming {
+		flip = true
+		fmt.Println("Congrats, you read this code so we are going to flip the image naming order ")
+	}
+
+}
 func main() {
+
 	// read sizes file and unmarshal intro slice of Size
 	var sizes []Size
 	file, _ := ioutil.ReadFile("sizes.json")
@@ -121,7 +136,7 @@ func readFileURLs() []string {
 	return u
 }
 
-//processJob is what starts the browser. It takes a list of sizes and runs it through each job/url passed in
+// processJob is what starts the browser. It takes a list of sizes and runs it through each job/url passed in
 func processJob(browser playwright.Browser, job Job, ctx context.Context, sizes []Size) error {
 	// looping over each size, we are starting a new browser window
 	for _, size := range sizes {
@@ -157,7 +172,13 @@ func processJob(browser playwright.Browser, job Job, ctx context.Context, sizes 
 		// rough formatting turning urls with slashes into something that can be stored as an image
 		x := strings.Replace(job.URL, "/", "_", -1)
 		x = strings.Replace(x, "https", "", -1)
-		x = x + strconv.Itoa(size.Width) + "x" + strconv.Itoa(size.Height) + ".png"
+
+		if flip {
+			x = strconv.Itoa(size.Width) + "x" + strconv.Itoa(size.Height) + x + ".png"
+		} else {
+			x = x + strconv.Itoa(size.Width) + "x" + strconv.Itoa(size.Height) + ".png"
+		}
+
 		fmt.Println("x", x) // printing URL/image that is being saved
 		_, err = page.Screenshot(playwright.PageScreenshotOptions{
 			Path:     playwright.String(filepath.Join(cwd, "out", x)),
