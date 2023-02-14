@@ -11,7 +11,7 @@ go build .
 ./Go-playwright 
 
 
-If you are realling feeling adventurous you use the following command to flip the image naming convention so sizes come first, domains second.  
+If you are realling feeling adventurous you can use the following command to flip the image naming convention so sizes come first, domains second.  
 ./Go-playwright -flip true
 
 
