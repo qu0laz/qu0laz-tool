@@ -18,12 +18,6 @@ import (
 )
 
 // Log a message, err and kill it
-func assertErrorToNilAndKill(message string, err error) {
-	if err != nil {
-		log.Fatalf(message, err)
-	}
-}
-
 // Size and job struct
 type Size struct {
 	Width  int `json:"width"`
@@ -129,7 +123,6 @@ func readFileURLs() []string {
 }
 
 //processJob is what starts the browser. It takes a list of sizes and runs it through each job/url passed in
-
 func processJob(browser playwright.Browser, job Job, ctx context.Context, sizes []Size) error {
 	// looping over each size, we are starting a new browser window
 	for _, size := range sizes {
@@ -148,10 +141,7 @@ func processJob(browser playwright.Browser, job Job, ctx context.Context, sizes 
 			<-ctx.Done()
 			context.Close()
 		}()
-		//creating a page
-		if err != nil {
-			return fmt.Errorf("could not create page: %w", err)
-		}
+		// creating page
 		page, err := context.NewPage(playwright.BrowserNewPageOptions{})
 		// actually visiting the page
 		_, err = page.Goto(job.URL, playwright.PageGotoOptions{
